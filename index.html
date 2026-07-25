@@ -108,8 +108,20 @@
       radial-gradient(1px 1px at 85% 20%, rgba(232,201,121,0.3) 1px, transparent 1px);
     background-size:100% 100%;
     pointer-events:none;
+    z-index:1;
   }
-  .hero-inner{ position:relative; max-width:1180px; margin:0 auto; }
+  .nature-bg{
+    position:absolute; inset:0; width:100%; height:100%;
+    z-index:0; pointer-events:none;
+  }
+  .nature-bg .peak-far{ opacity:0.5; }
+  .nature-bg .peak-near{ opacity:0.85; }
+  .nature-bg .sun{ animation:glow 6s ease-in-out infinite; transform-box:fill-box; transform-origin:center; }
+  @keyframes glow{ 0%,100%{ opacity:0.75; } 50%{ opacity:1; } }
+  .nature-bg .cloud{ opacity:0.16; animation:drift 50s linear infinite; }
+  .nature-bg .cloud.c2{ animation-duration:70s; animation-delay:-20s; opacity:0.1; }
+  @keyframes drift{ 0%{ transform:translateX(-60px); } 100%{ transform:translateX(60px); } }
+  .hero-inner{ position:relative; z-index:2; max-width:1180px; margin:0 auto; }
   .eyebrow-row{ display:flex; align-items:center; gap:10px; margin-bottom:22px; }
   .eyebrow-row .rule{ width:36px; height:1px; background:var(--gold); }
   .eyebrow{ font-size:0.78rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--gold-light); }
@@ -122,21 +134,30 @@
     margin-top:24px; max-width:520px; font-size:1.05rem; line-height:1.65; color:rgba(247,244,236,0.75);
   }
 
-  /* Route line signature */
-  .route-svg{ width:100%; height:auto; margin-top:56px; opacity:0.9; }
+  /* Source-to-destination pinpoint map */
+  .route-svg{ width:100%; height:auto; margin-top:56px; overflow:visible; }
   .route-path{
-    fill:none; stroke:var(--gold); stroke-width:1.4; stroke-dasharray:6 6;
-    stroke-opacity:0.55;
+    fill:none; stroke:var(--gold); stroke-width:1.4; stroke-dasharray:5 7;
+    stroke-opacity:0.6;
   }
-  .route-dot{ fill:var(--gold-light); }
-  .plane{ animation:fly 9s linear infinite; }
+  .pin-label{ font-family:'JetBrains Mono', monospace; font-size:13px; fill:var(--cream-text); }
+  .pin-sub{ font-family:'JetBrains Mono', monospace; font-size:9px; letter-spacing:1.5px; fill:var(--gold-light); }
+  .pin-dot{ fill:var(--gold-light); }
+  .pin-ring{ fill:none; stroke:var(--gold-light); stroke-width:1.4; }
+  .pulse-ring{
+    fill:none; stroke:var(--gold-light); stroke-width:1.2;
+    transform-box:fill-box; transform-origin:center;
+    animation:pulseRing 2.4s ease-out infinite;
+  }
+  @keyframes pulseRing{ 0%{ transform:scale(0.5); opacity:0.7; } 100%{ transform:scale(2.1); opacity:0; } }
   @keyframes fly{
     0%{ offset-distance:0%; }
     100%{ offset-distance:100%; }
   }
   .route-plane{
-    offset-path: path("M20,70 C160,10 300,130 460,60 C600,0 760,110 920,50");
-    animation:fly 9s linear infinite;
+    offset-path: path("M60,120 C220,35 380,155 520,70 C650,-5 800,95 890,40");
+    offset-rotate:auto;
+    animation:fly 8s linear infinite;
   }
 
   /* Boarding pass search bar */
@@ -373,6 +394,50 @@
 
 <!-- HERO -->
 <section class="hero">
+  <svg class="nature-bg" viewBox="0 0 1200 620" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#0E2233"/>
+        <stop offset="55%" stop-color="#1B3E3A"/>
+        <stop offset="100%" stop-color="#0E2233"/>
+      </linearGradient>
+      <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#E8C979" stop-opacity="0.85"/>
+        <stop offset="100%" stop-color="#E8C979" stop-opacity="0"/>
+      </radialGradient>
+      <symbol id="pine" viewBox="0 0 40 70">
+        <path d="M20 0 L34 24 L27 24 L38 46 L29 46 L40 70 L0 70 L11 46 L2 46 L13 24 L6 24 Z"/>
+      </symbol>
+    </defs>
+    <rect x="0" y="0" width="1200" height="620" fill="url(#skyGrad)"/>
+    <circle class="sun" cx="970" cy="150" r="150" fill="url(#sunGlow)"/>
+    <circle class="sun" cx="970" cy="150" r="42" fill="#E8C979" opacity="0.9"/>
+    <ellipse class="cloud" cx="260" cy="140" rx="110" ry="18" fill="#F7F4EC"/>
+    <ellipse class="cloud c2" cx="620" cy="90" rx="140" ry="16" fill="#F7F4EC"/>
+    <path class="peak-far" d="M0,360 L110,270 L210,330 L330,225 L450,340 L590,240 L730,340 L870,270 L1000,350 L1120,280 L1200,335 L1200,620 L0,620 Z" fill="#1B4741"/>
+    <path class="peak-near" d="M0,420 L160,310 L300,390 L440,285 L590,405 L740,300 L900,400 L1040,310 L1200,400 L1200,620 L0,620 Z" fill="#123430"/>
+    <g fill="#081521">
+      <use href="#pine" x="10" y="480" width="46" height="80"/>
+      <use href="#pine" x="70" y="495" width="34" height="60"/>
+      <use href="#pine" x="130" y="475" width="50" height="88"/>
+      <use href="#pine" x="200" y="500" width="30" height="52"/>
+      <use href="#pine" x="250" y="482" width="44" height="76"/>
+      <use href="#pine" x="320" y="498" width="32" height="56"/>
+      <use href="#pine" x="380" y="478" width="48" height="84"/>
+      <use href="#pine" x="450" y="500" width="30" height="52"/>
+      <use href="#pine" x="500" y="484" width="42" height="74"/>
+      <use href="#pine" x="570" y="500" width="32" height="56"/>
+      <use href="#pine" x="630" y="478" width="48" height="84"/>
+      <use href="#pine" x="700" y="500" width="30" height="52"/>
+      <use href="#pine" x="750" y="482" width="44" height="76"/>
+      <use href="#pine" x="820" y="498" width="32" height="56"/>
+      <use href="#pine" x="880" y="478" width="48" height="84"/>
+      <use href="#pine" x="950" y="500" width="30" height="52"/>
+      <use href="#pine" x="1000" y="484" width="42" height="74"/>
+      <use href="#pine" x="1070" y="500" width="32" height="56"/>
+      <use href="#pine" x="1130" y="478" width="48" height="84"/>
+    </g>
+  </svg>
   <div class="hero-inner">
     <div class="eyebrow-row"><span class="rule"></span><span class="eyebrow">Tours &amp; Travel, Curated</span></div>
     <h1>Chart your next<br><span class="it">horizon</span>, plotted with care.</h1>
@@ -403,14 +468,27 @@
       <button class="sbtn" type="button" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Plan My Trip</button>
     </div>
 
-    <svg class="route-svg" viewBox="0 0 940 140" preserveAspectRatio="none" aria-hidden="true">
-      <path class="route-path" d="M20,70 C160,10 300,130 460,60 C600,0 760,110 920,50"/>
-      <circle class="route-dot" cx="20" cy="70" r="4"/>
-      <circle class="route-dot" cx="300" cy="55" r="3"/>
-      <circle class="route-dot" cx="600" cy="35" r="3"/>
-      <circle class="route-dot" cx="920" cy="50" r="4"/>
-      <g class="route-plane" transform="translate(-6,-6)">
-        <path d="M0 6 L10 0 L20 6 L11 6 L11 12 Z" fill="#E8C979"/>
+    <svg class="route-svg" viewBox="0 0 940 170" preserveAspectRatio="none" aria-hidden="true">
+      <path class="route-path" d="M60,120 C220,35 380,155 520,70 C650,-5 800,95 890,40"/>
+
+      <!-- source pin -->
+      <g transform="translate(60,120)">
+        <circle class="pulse-ring" r="8"/>
+        <circle class="pin-dot" r="5"/>
+        <text class="pin-sub" x="0" y="-22" text-anchor="middle">SOURCE</text>
+        <text class="pin-label" x="0" y="34" text-anchor="middle">Siliguri</text>
+      </g>
+
+      <!-- destination pin -->
+      <g transform="translate(890,40)">
+        <circle class="pin-ring" r="9"/>
+        <circle class="pin-dot" r="3.5"/>
+        <text class="pin-sub" x="-10" y="-22" text-anchor="middle">DESTINATION</text>
+        <text class="pin-label" x="-10" y="34" text-anchor="middle">Your next trip</text>
+      </g>
+
+      <g class="route-plane">
+        <path d="M-8,-4 L10,0 L-8,4 L-4,0 Z" fill="#E8C979"/>
       </g>
     </svg>
   </div>
