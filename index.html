@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trip Nova — Chart Your Next Horizon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0E2233;
+    --navy-deep:#081521;
+    --gold:#C89B3C;
+    --gold-light:#E8C979;
+    --teal:#2F6E62;
+    --parchment:#EDE6D6;
+    --parchment-2:#F6F2E7;
+    --ink:#1B1B18;
+    --ink-soft:#4A4A42;
+    --cream-text:#F7F4EC;
+    --line:rgba(200,155,60,0.35);
+    --radius:2px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter', sans-serif;
+    background:var(--parchment-2);
+    color:var(--ink);
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+  h1,h2,h3,.display{ font-family:'Fraunces', serif; }
+  .mono{ font-family:'JetBrains Mono', monospace; letter-spacing:0.03em; }
+  a{ text-decoration:none; color:inherit; }
+  img{max-width:100%; display:block;}
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 24px; }
+  :focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
+
+  /* ===== NAV ===== */
+  header{
+    position:sticky; top:0; z-index:100;
+    background:rgba(14,34,51,0.96);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-inner{ display:flex; align-items:center; justify-content:space-between; padding:16px 24px; max-width:1180px; margin:0 auto; }
+  .brand{ display:flex; align-items:center; gap:10px; color:var(--cream-text); }
+  .brand-mark{
+    width:34px; height:34px; border:1.5px solid var(--gold);
+    border-radius:50%; position:relative; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .brand-mark svg{ width:18px; height:18px; animation:spin 18s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .brand-name{ font-family:'Fraunces', serif; font-size:1.25rem; font-weight:600; letter-spacing:0.01em; }
+  .brand-name em{ font-style:normal; color:var(--gold-light); }
+  nav.links{ display:flex; gap:32px; align-items:center; }
+  nav.links a{
+    color:var(--cream-text); font-size:0.88rem; letter-spacing:0.04em; text-transform:uppercase;
+    opacity:0.85; transition:opacity 0.2s;
+    position:relative; padding-bottom:4px;
+  }
+  nav.links a:hover{ opacity:1; }
+  nav.links a::after{
+    content:""; position:absolute; left:0; bottom:0; width:0; height:1px; background:var(--gold);
+    transition:width 0.25s;
+  }
+  nav.links a:hover::after{ width:100%; }
+  .nav-cta{
+    display:flex; align-items:center; gap:8px;
+    background:var(--gold); color:var(--navy-deep) !important;
+    padding:9px 16px; border-radius:2px; font-size:0.82rem; font-weight:700;
+    letter-spacing:0.03em; text-transform:uppercase;
+  }
+  .nav-cta svg{ width:15px; height:15px; }
+  .burger{ display:none; flex-direction:column; gap:5px; background:none; border:none; cursor:pointer; padding:6px; }
+  .burger span{ width:24px; height:2px; background:var(--cream-text); display:block; }
+  .mobile-panel{ display:none; }
+
+  @media (max-width:880px){
+    nav.links, .nav-cta{ display:none; }
+    .burger{ display:flex; }
+    .mobile-panel.open{
+      display:flex; flex-direction:column; gap:0;
+      background:var(--navy-deep); border-top:1px solid var(--line);
+    }
+    .mobile-panel a{
+      color:var(--cream-text); padding:16px 24px; font-size:0.95rem;
+      border-bottom:1px solid rgba(255,255,255,0.06); text-transform:uppercase; letter-spacing:0.04em;
+    }
+    .mobile-panel .nav-cta{ display:flex; margin:16px 24px; justify-content:center; }
+  }
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative; background:var(--navy); color:var(--cream-text);
+    padding:90px 24px 110px; overflow:hidden;
+  }
+  .hero::before{
+    content:""; position:absolute; inset:0;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(232,201,121,0.4) 1px, transparent 1px),
+      radial-gradient(1px 1px at 70% 60%, rgba(232,201,121,0.3) 1px, transparent 1px),
+      radial-gradient(1px 1px at 40% 80%, rgba(232,201,121,0.25) 1px, transparent 1px),
+      radial-gradient(1px 1px at 85% 20%, rgba(232,201,121,0.3) 1px, transparent 1px);
+    background-size:100% 100%;
+    pointer-events:none;
+  }
+  .hero-inner{ position:relative; max-width:1180px; margin:0 auto; }
+  .eyebrow-row{ display:flex; align-items:center; gap:10px; margin-bottom:22px; }
+  .eyebrow-row .rule{ width:36px; height:1px; background:var(--gold); }
+  .eyebrow{ font-size:0.78rem; letter-spacing:0.16em; text-transform:uppercase; color:var(--gold-light); }
+  .hero h1{
+    font-size:clamp(2.4rem, 6vw, 4.4rem); font-weight:600; line-height:1.05;
+    max-width:820px; letter-spacing:-0.01em;
+  }
+  .hero h1 .it{ font-style:italic; font-weight:500; color:var(--gold-light); }
+  .hero-sub{
+    margin-top:24px; max-width:520px; font-size:1.05rem; line-height:1.65; color:rgba(247,244,236,0.75);
+  }
+
+  /* Route line signature */
+  .route-svg{ width:100%; height:auto; margin-top:56px; opacity:0.9; }
+  .route-path{
+    fill:none; stroke:var(--gold); stroke-width:1.4; stroke-dasharray:6 6;
+    stroke-opacity:0.55;
+  }
+  .route-dot{ fill:var(--gold-light); }
+  .plane{ animation:fly 9s linear infinite; }
+  @keyframes fly{
+    0%{ offset-distance:0%; }
+    100%{ offset-distance:100%; }
+  }
+  .route-plane{
+    offset-path: path("M20,70 C160,10 300,130 460,60 C600,0 760,110 920,50");
+    animation:fly 9s linear infinite;
+  }
+
+  /* Boarding pass search bar */
+  .searchbar{
+    margin-top:48px; background:var(--parchment-2); border-radius:3px;
+    display:flex; flex-wrap:wrap; position:relative;
+    box-shadow:0 20px 50px rgba(0,0,0,0.35);
+  }
+  .searchbar::before{
+    content:""; position:absolute; left:0; top:0; bottom:0; width:6px;
+    background:repeating-linear-gradient(180deg, var(--gold) 0 6px, transparent 6px 12px);
+  }
+  .sfield{ flex:1 1 160px; padding:18px 22px; border-right:1px dashed rgba(27,27,24,0.2); min-width:140px; }
+  .sfield:last-of-type{ border-right:none; }
+  .sfield label{ display:block; font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:6px; }
+  .sfield input, .sfield select{
+    border:none; background:none; font-family:'JetBrains Mono', monospace; font-size:0.95rem; color:var(--ink);
+    width:100%; outline:none;
+  }
+  .sbtn{
+    flex:0 0 auto; background:var(--teal); color:#fff; border:none; padding:0 32px;
+    font-size:0.85rem; letter-spacing:0.06em; text-transform:uppercase; font-weight:600;
+    cursor:pointer; transition:background 0.2s;
+  }
+  .sbtn:hover{ background:#255a50; }
+  @media (max-width:700px){ .sbtn{ width:100%; padding:16px; } }
+
+  /* ===== STATS STRIP ===== */
+  .stats{
+    background:var(--gold); color:var(--navy-deep);
+    display:grid; grid-template-columns:repeat(4,1fr);
+  }
+  .stat{ padding:26px 16px; text-align:center; border-right:1px solid rgba(14,34,51,0.15); }
+  .stat:last-child{ border-right:none; }
+  .stat .num{ font-family:'JetBrains Mono',monospace; font-size:1.6rem; font-weight:700; }
+  .stat .lbl{ font-size:0.68rem; letter-spacing:0.08em; text-transform:uppercase; margin-top:4px; opacity:0.85; }
+  @media (max-width:700px){
+    .stats{ grid-template-columns:repeat(2,1fr); }
+    .stat{ border-bottom:1px solid rgba(14,34,51,0.15); }
+  }
+
+  /* ===== SECTION HEADERS ===== */
+  section{ padding:96px 24px; }
+  .sec-head{ max-width:640px; margin-bottom:56px; }
+  .sec-head .eyebrow{ color:var(--teal); }
+  .sec-head h2{ font-size:clamp(1.8rem,4vw,2.6rem); font-weight:600; margin-top:14px; color:var(--ink); }
+  .sec-head p{ margin-top:16px; color:var(--ink-soft); line-height:1.6; font-size:1rem; }
+  .light .eyebrow{ color:var(--gold-light); }
+
+  /* ===== DESTINATIONS ===== */
+  .destinations{ background:var(--parchment-2); }
+  .dest-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:2px; background:var(--ink); }
+  @media (max-width:900px){ .dest-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .dest-grid{ grid-template-columns:1fr; } }
+  .dest-card{
+    position:relative; aspect-ratio:4/5; overflow:hidden; color:#fff;
+    display:flex; flex-direction:column; justify-content:flex-end; padding:22px;
+  }
+  .dest-card .bg{ position:absolute; inset:0; transition:transform 0.6s ease; }
+  .dest-card:hover .bg{ transform:scale(1.08); }
+  .dest-card::after{
+    content:""; position:absolute; inset:0;
+    background:linear-gradient(180deg, transparent 35%, rgba(8,21,33,0.88) 100%);
+  }
+  .dest-card .content{ position:relative; z-index:2; }
+  .dest-card .code{ font-family:'JetBrains Mono',monospace; font-size:0.72rem; letter-spacing:0.1em; color:var(--gold-light); }
+  .dest-card h3{ font-size:1.35rem; margin-top:6px; font-weight:600; }
+  .dest-card .price{ font-size:0.82rem; margin-top:6px; color:rgba(255,255,255,0.75); }
+  .d1 .bg{ background:linear-gradient(135deg,#0E2233,#2F6E62 70%); }
+  .d2 .bg{ background:linear-gradient(135deg,#3A2A1D,#C89B3C 75%); }
+  .d3 .bg{ background:linear-gradient(135deg,#1B2F3A,#4B7A8C 75%); }
+  .d4 .bg{ background:linear-gradient(135deg,#22333B,#7A8450 75%); }
+  .d5 .bg{ background:linear-gradient(135deg,#2B1E33,#8C5A6E 75%); }
+  .d6 .bg{ background:linear-gradient(135deg,#173029,#3E8E75 75%); }
+
+  /* ===== WHY US ===== */
+  .why{ background:var(--navy); color:var(--cream-text); }
+  .why-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:36px; margin-top:8px; }
+  @media (max-width:800px){ .why-grid{ grid-template-columns:1fr; } }
+  .why-item{ border-top:1px solid var(--line); padding-top:20px; }
+  .why-item .idx{ font-family:'JetBrains Mono',monospace; color:var(--gold); font-size:0.8rem; }
+  .why-item h3{ font-size:1.15rem; margin-top:10px; font-weight:600; }
+  .why-item p{ margin-top:10px; font-size:0.92rem; line-height:1.6; color:rgba(247,244,236,0.7); }
+
+  /* ===== PACKAGES (boarding pass tickets) ===== */
+  .packages{ background:var(--parchment-2); }
+  .ticket-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:32px; }
+  @media (max-width:940px){ .ticket-grid{ grid-template-columns:1fr; max-width:460px; margin:0 auto; } }
+  .ticket{
+    background:#fff; border-radius:4px; overflow:hidden;
+    box-shadow:0 10px 30px rgba(27,27,24,0.08); border:1px solid rgba(27,27,24,0.08);
+    display:flex; flex-direction:column;
+  }
+  .ticket-top{ padding:24px 24px 18px; }
+  .ticket-top .route{ display:flex; align-items:center; gap:10px; font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.06em; }
+  .ticket-top .route svg{ width:14px; height:14px; color:var(--teal); }
+  .ticket-top h3{ font-size:1.4rem; margin-top:10px; font-weight:600; }
+  .ticket-top .days{ margin-top:6px; font-size:0.85rem; color:var(--ink-soft); }
+  .perf{
+    height:0; border-top:2px dashed rgba(27,27,24,0.18); position:relative; margin:0 0;
+  }
+  .perf::before, .perf::after{
+    content:""; position:absolute; top:-9px; width:18px; height:18px; background:var(--parchment-2); border-radius:50%;
+  }
+  .perf::before{ left:-9px; } .perf::after{ right:-9px; }
+  .ticket-bottom{ padding:20px 24px 26px; flex:1; display:flex; flex-direction:column; }
+  .ticket-bottom ul{ list-style:none; font-size:0.88rem; color:var(--ink-soft); line-height:1.9; }
+  .ticket-bottom ul li::before{ content:"— "; color:var(--gold); }
+  .ticket-foot{ margin-top:auto; padding-top:18px; display:flex; align-items:center; justify-content:space-between; }
+  .ticket-foot .price{ font-family:'JetBrains Mono',monospace; font-size:1.3rem; font-weight:700; color:var(--navy); }
+  .ticket-foot .price span{ font-size:0.7rem; color:var(--ink-soft); font-weight:400; display:block; }
+  .book-btn{
+    background:var(--navy); color:#fff; padding:11px 20px; font-size:0.78rem; text-transform:uppercase;
+    letter-spacing:0.05em; border-radius:2px; font-weight:600; transition:background 0.2s;
+  }
+  .book-btn:hover{ background:var(--teal); }
+  .barcode{
+    height:34px; margin-top:16px;
+    background:repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px 4px, var(--ink) 4px 5px, transparent 5px 9px);
+    opacity:0.85;
+  }
+
+  /* ===== TESTIMONIALS ===== */
+  .testi{ background:var(--parchment); }
+  .testi-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+  @media (max-width:900px){ .testi-grid{ grid-template-columns:1fr; } }
+  .tcard{ background:var(--parchment-2); padding:28px; border-left:2px solid var(--gold); }
+  .tcard .quote{ font-family:'Fraunces',serif; font-style:italic; font-size:1.05rem; line-height:1.6; color:var(--ink); }
+  .tcard .who{ margin-top:18px; font-size:0.82rem; color:var(--ink-soft); }
+  .tcard .who b{ color:var(--ink); font-weight:600; }
+  .stars{ color:var(--gold); font-size:0.85rem; margin-bottom:10px; letter-spacing:2px; }
+
+  /* ===== CONTACT ===== */
+  .contact{ background:var(--navy); color:var(--cream-text); }
+  .contact-grid{ display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start; }
+  @media (max-width:880px){ .contact-grid{ grid-template-columns:1fr; gap:40px; } }
+  .contact-info .row{ display:flex; gap:16px; align-items:flex-start; margin-top:26px; }
+  .contact-info .row .ic{
+    width:38px; height:38px; border:1px solid var(--gold); border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .contact-info .row .ic svg{ width:17px; height:17px; color:var(--gold-light); }
+  .contact-info .row .lbl{ font-size:0.7rem; text-transform:uppercase; letter-spacing:0.08em; color:rgba(247,244,236,0.55); }
+  .contact-info .row .val{ margin-top:2px; font-size:1rem; }
+
+  .wa-btn{
+    margin-top:32px; display:inline-flex; align-items:center; gap:12px;
+    background:#25D366; color:#0b3d24 !important; padding:15px 26px; border-radius:3px;
+    font-weight:700; font-size:0.95rem; box-shadow:0 12px 28px rgba(37,211,102,0.3);
+    transition:transform 0.2s, box-shadow 0.2s;
+  }
+  .wa-btn:hover{ transform:translateY(-2px); box-shadow:0 16px 34px rgba(37,211,102,0.4); }
+  .wa-btn svg{ width:24px; height:24px; }
+
+  .cform{ background:var(--parchment-2); color:var(--ink); padding:32px; border-radius:3px; }
+  .cform .f{ margin-bottom:18px; }
+  .cform label{ display:block; font-size:0.72rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-soft); margin-bottom:6px; }
+  .cform input, .cform textarea{
+    width:100%; border:1px solid rgba(27,27,24,0.18); background:#fff; padding:12px 14px;
+    font-family:'Inter',sans-serif; font-size:0.92rem; border-radius:2px; outline:none;
+  }
+  .cform input:focus, .cform textarea:focus{ border-color:var(--teal); }
+  .cform textarea{ resize:vertical; min-height:100px; }
+  .cform button{
+    width:100%; background:var(--navy); color:#fff; border:none; padding:14px;
+    font-size:0.85rem; text-transform:uppercase; letter-spacing:0.06em; font-weight:700;
+    border-radius:2px; cursor:pointer; margin-top:6px; transition:background 0.2s;
+  }
+  .cform button:hover{ background:var(--teal); }
+  .form-note{ margin-top:12px; font-size:0.78rem; color:var(--ink-soft); display:none; }
+  .form-note.show{ display:block; }
+
+  /* ===== FOOTER ===== */
+  footer{ background:var(--navy-deep); color:rgba(247,244,236,0.6); padding:48px 24px 28px; }
+  .foot-inner{ max-width:1180px; margin:0 auto; display:flex; flex-wrap:wrap; justify-content:space-between; gap:24px; }
+  .foot-brand{ color:var(--cream-text); font-family:'Fraunces',serif; font-size:1.1rem; }
+  .foot-links{ display:flex; gap:24px; flex-wrap:wrap; font-size:0.85rem; }
+  .foot-links a:hover{ color:var(--gold-light); }
+  .foot-bottom{ max-width:1180px; margin:32px auto 0; padding-top:20px; border-top:1px solid rgba(255,255,255,0.08); font-size:0.78rem; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+
+  /* ===== FLOATING WHATSAPP (mobile-friendly persistent contact) ===== */
+  .float-wa{
+    position:fixed; bottom:22px; right:22px; z-index:200;
+    width:58px; height:58px; background:#25D366; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 10px 26px rgba(0,0,0,0.35);
+    animation:pulse 2.6s ease-in-out infinite;
+  }
+  .float-wa svg{ width:30px; height:30px; color:#fff; }
+  @keyframes pulse{
+    0%,100%{ box-shadow:0 10px 26px rgba(37,211,102,0.35); }
+    50%{ box-shadow:0 10px 34px rgba(37,211,102,0.6); }
+  }
+  @media (max-width:560px){
+    .float-wa{ width:52px; height:52px; bottom:16px; right:16px; }
+    .float-wa svg{ width:26px; height:26px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-inner">
+    <a href="#" class="brand">
+      <span class="brand-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#C89B3C" stroke-width="1.4"><circle cx="12" cy="12" r="9"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2" stroke-width="1"/><path d="M12 12l4-6-6 4-4 6 6-4z" fill="#C89B3C" stroke="none"/></svg>
+      </span>
+      <span class="brand-name">Trip <em>Nova</em></span>
+    </a>
+    <nav class="links">
+      <a href="#destinations">Destinations</a>
+      <a href="#packages">Packages</a>
+      <a href="#why">Why Us</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <a class="nav-cta" href="https://wa.me/919876543210" target="_blank" rel="noopener">
+      <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 3C9 3 3.3 8.6 3.3 15.5c0 2.6.8 5.1 2.2 7.2L3 29l6.5-2.4c2 .9 3.7 1.4 6.5 1.4 7 0 12.7-5.6 12.7-12.5S23 3 16 3zm0 22.7c-2.2 0-4-.5-5.8-1.5l-.4-.2-4 1.5 1.4-3.9-.3-.4c-1.3-2-2-4.3-2-6.7C4.9 9.6 9.9 4.7 16 4.7s11.1 4.9 11.1 10.8S22.1 25.7 16 25.7z"/><path d="M22 18.2c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.7.2-.2.3-.8 1.1-1 1.3-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.7-1.7-1-.9-1.7-2-1.9-2.3-.2-.3 0-.5.1-.7.1-.1.3-.4.5-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.2-.7-1.8-1-2.4-.3-.6-.5-.6-.7-.6h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.2 3.4 5.3 4.7.7.3 1.3.5 1.8.7.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4z"/></svg>
+      WhatsApp
+    </a>
+    <button class="burger" id="burgerBtn" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-panel" id="mobilePanel">
+    <a href="#destinations">Destinations</a>
+    <a href="#packages">Packages</a>
+    <a href="#why">Why Us</a>
+    <a href="#testimonials">Reviews</a>
+    <a href="#contact">Contact</a>
+    <a class="nav-cta" href="https://wa.me/919876543210" target="_blank" rel="noopener">Chat on WhatsApp</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow-row"><span class="rule"></span><span class="eyebrow">Tours &amp; Travel, Curated</span></div>
+    <h1>Chart your next<br><span class="it">horizon</span>, plotted with care.</h1>
+    <p class="hero-sub">Trip Nova plans hand-picked journeys across mountains, coasts and cities — from the first flight to the last sunset. You bring the wanderlust, we handle the route.</p>
+
+    <div class="searchbar">
+      <div class="sfield">
+        <label for="from">From</label>
+        <input id="from" type="text" placeholder="Siliguri, IN">
+      </div>
+      <div class="sfield">
+        <label for="to">Destination</label>
+        <input id="to" type="text" placeholder="Where to?">
+      </div>
+      <div class="sfield">
+        <label for="depart">Depart</label>
+        <input id="depart" type="date">
+      </div>
+      <div class="sfield">
+        <label for="travellers">Travellers</label>
+        <select id="travellers">
+          <option>1 Adult</option>
+          <option>2 Adults</option>
+          <option>Family (4)</option>
+          <option>Group (5+)</option>
+        </select>
+      </div>
+      <button class="sbtn" type="button" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Plan My Trip</button>
+    </div>
+
+    <svg class="route-svg" viewBox="0 0 940 140" preserveAspectRatio="none" aria-hidden="true">
+      <path class="route-path" d="M20,70 C160,10 300,130 460,60 C600,0 760,110 920,50"/>
+      <circle class="route-dot" cx="20" cy="70" r="4"/>
+      <circle class="route-dot" cx="300" cy="55" r="3"/>
+      <circle class="route-dot" cx="600" cy="35" r="3"/>
+      <circle class="route-dot" cx="920" cy="50" r="4"/>
+      <g class="route-plane" transform="translate(-6,-6)">
+        <path d="M0 6 L10 0 L20 6 L11 6 L11 12 Z" fill="#E8C979"/>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><div class="num">500+</div><div class="lbl">Trips Curated</div></div>
+  <div class="stat"><div class="num">42</div><div class="lbl">Destinations</div></div>
+  <div class="stat"><div class="num">12K+</div><div class="lbl">Happy Travellers</div></div>
+  <div class="stat"><div class="num">4.9 / 5</div><div class="lbl">Average Rating</div></div>
+</div>
+
+<!-- DESTINATIONS -->
+<section class="destinations" id="destinations">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Popular Routes</span>
+      <h2>Where Trip Nova is flying this season</h2>
+      <p>Six routes our travellers keep coming back for — each priced per person, twin sharing.</p>
+    </div>
+  </div>
+  <div class="dest-grid">
+    <div class="dest-card d1"><div class="bg"></div><div class="content"><div class="code">BLR · IDN</div><h3>Bali, Indonesia</h3><div class="price">From ₹38,000 · 6D/5N</div></div></div>
+    <div class="dest-card d2"><div class="bg"></div><div class="content"><div class="code">COK · IND</div><h3>Kerala Backwaters</h3><div class="price">From ₹16,500 · 4D/3N</div></div></div>
+    <div class="dest-card d3"><div class="bg"></div><div class="content"><div class="code">DXB · UAE</div><h3>Dubai, UAE</h3><div class="price">From ₹42,000 · 5D/4N</div></div></div>
+    <div class="dest-card d4"><div class="bg"></div><div class="content"><div class="code">ZRH · CHE</div><h3>Swiss Alps</h3><div class="price">From ₹95,000 · 7D/6N</div></div></div>
+    <div class="dest-card d5"><div class="bg"></div><div class="content"><div class="code">IXL · IND</div><h3>Ladakh</h3><div class="price">From ₹22,000 · 6D/5N</div></div></div>
+    <div class="dest-card d6"><div class="bg"></div><div class="content"><div class="code">MLE · MDV</div><h3>Maldives</h3><div class="price">From ₹65,000 · 4D/3N</div></div></div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section class="why" id="why">
+  <div class="wrap">
+    <div class="sec-head light">
+      <span class="eyebrow">Why Trip Nova</span>
+      <h2 style="color:#F7F4EC;">Travel planning, without the guesswork</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="idx">Local Ground Teams</div>
+        <h3>On-ground support, everywhere</h3>
+        <p>Every itinerary is backed by a local coordinator reachable directly on WhatsApp, day or night.</p>
+      </div>
+      <div class="why-item">
+        <div class="idx">Transparent Pricing</div>
+        <h3>No hidden charges</h3>
+        <p>What you see on the ticket is what you pay — flights, stays and transfers itemised upfront.</p>
+      </div>
+      <div class="why-item">
+        <div class="idx">Flexible Dates</div>
+        <h3>Reschedule with ease</h3>
+        <p>Plans change. Shift your travel dates free of charge up to 7 days before departure.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section class="packages" id="packages">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Fixed Departures</span>
+      <h2>Book a package, boarding-pass style</h2>
+      <p>Every package below includes stay, breakfast and airport transfers. Customisation available on request.</p>
+    </div>
+    <div class="ticket-grid">
+
+      <div class="ticket">
+        <div class="ticket-top">
+          <div class="route"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 16l20-8-8 20-3-8-8-3z"/></svg>SIL → BALI</div>
+          <h3>Bali Escape</h3>
+          <div class="days">6 Days / 5 Nights · Beaches &amp; Temples</div>
+        </div>
+        <div class="perf"></div>
+        <div class="ticket-bottom">
+          <ul>
+            <li>4-star beachfront resort</li>
+            <li>Ubud &amp; Uluwatu day trips</li>
+            <li>Airport transfers included</li>
+          </ul>
+          <div class="barcode"></div>
+          <div class="ticket-foot">
+            <div class="price">₹38,000<span>per person</span></div>
+            <a class="book-btn" href="#contact">Enquire</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-top">
+          <div class="route"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 16l20-8-8 20-3-8-8-3z"/></svg>SIL → LADAKH</div>
+          <h3>Ladakh High Roads</h3>
+          <div class="days">6 Days / 5 Nights · Mountains &amp; Monasteries</div>
+        </div>
+        <div class="perf"></div>
+        <div class="ticket-bottom">
+          <ul>
+            <li>Pangong &amp; Nubra valley</li>
+            <li>Oxygen support on request</li>
+            <li>Local guide included</li>
+          </ul>
+          <div class="barcode"></div>
+          <div class="ticket-foot">
+            <div class="price">₹22,000<span>per person</span></div>
+            <a class="book-btn" href="#contact">Enquire</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="ticket">
+        <div class="ticket-top">
+          <div class="route"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 16l20-8-8 20-3-8-8-3z"/></svg>SIL → MALDIVES</div>
+          <h3>Maldives Overwater</h3>
+          <div class="days">4 Days / 3 Nights · Ocean &amp; Reefs</div>
+        </div>
+        <div class="perf"></div>
+        <div class="ticket-bottom">
+          <ul>
+            <li>Overwater villa stay</li>
+            <li>Snorkelling excursion</li>
+            <li>Seaplane transfer included</li>
+          </ul>
+          <div class="barcode"></div>
+          <div class="ticket-foot">
+            <div class="price">₹65,000<span>per person</span></div>
+            <a class="book-btn" href="#contact">Enquire</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testi" id="testimonials">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Traveller Notes</span>
+      <h2>What the road back said</h2>
+    </div>
+    <div class="testi-grid">
+      <div class="tcard">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"Every transfer was on time and our Bali coordinator answered every WhatsApp message within minutes."</p>
+        <div class="who"><b>Ananya R.</b> — Bali, 2026</div>
+      </div>
+      <div class="tcard">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"Booked Ladakh in under an hour over WhatsApp. The itinerary matched exactly what we were quoted."</p>
+        <div class="who"><b>Rohit S.</b> — Ladakh, 2025</div>
+      </div>
+      <div class="tcard">
+        <div class="stars">★★★★☆</div>
+        <p class="quote">"First family trip abroad and Trip Nova handled visas, stays and transfers without a single hiccup."</p>
+        <div class="who"><b>Meera &amp; family</b> — Dubai, 2025</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div class="sec-head light">
+      <span class="eyebrow">Get In Touch</span>
+      <h2 style="color:#F7F4EC;">Plan your trip on WhatsApp</h2>
+      <p style="color:rgba(247,244,236,0.7);">Fastest way to reach us — message our travel desk directly and get a custom itinerary same day.</p>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-info">
+        <a class="wa-btn" href="https://wa.me/919876543210?text=Hi%20Trip%20Nova%2C%20I%27d%20like%20to%20plan%20a%20trip." target="_blank" rel="noopener">
+          <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 3C9 3 3.3 8.6 3.3 15.5c0 2.6.8 5.1 2.2 7.2L3 29l6.5-2.4c2 .9 3.7 1.4 6.5 1.4 7 0 12.7-5.6 12.7-12.5S23 3 16 3zm0 22.7c-2.2 0-4-.5-5.8-1.5l-.4-.2-4 1.5 1.4-3.9-.3-.4c-1.3-2-2-4.3-2-6.7C4.9 9.6 9.9 4.7 16 4.7s11.1 4.9 11.1 10.8S22.1 25.7 16 25.7z"/><path d="M22 18.2c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.7.2-.2.3-.8 1.1-1 1.3-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.7-1.7-1-.9-1.7-2-1.9-2.3-.2-.3 0-.5.1-.7.1-.1.3-.4.5-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.2-.7-1.8-1-2.4-.3-.6-.5-.6-.7-.6h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.2 3.4 5.3 4.7.7.3 1.3.5 1.8.7.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4z"/></svg>
+          Chat on WhatsApp
+        </a>
+
+        <div class="row">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.4 2.1L8.1 9.7a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.4c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.9 2.2z"/></svg></div>
+          <div><div class="lbl">Call Us</div><div class="val">+91 98765 43210</div></div>
+        </div>
+        <div class="row">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v16H4z" opacity="0"/><path d="M22 6l-10 7L2 6"/><path d="M2 6h20v12H2z"/></svg></div>
+          <div><div class="lbl">Email</div><div class="val">hello@tripnova.travel</div></div>
+        </div>
+        <div class="row">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 10c0 6-9 12-9 12s-9-6-9-12a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><div class="lbl">Office</div><div class="val">Sevoke Road, Siliguri, WB 734001</div></div>
+        </div>
+        <div class="row">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+          <div><div class="lbl">Desk Hours</div><div class="val">Mon – Sat, 10:00 AM – 8:00 PM</div></div>
+        </div>
+      </div>
+
+      <form class="cform" id="contactForm">
+        <div class="f">
+          <label for="name">Full Name</label>
+          <input id="name" type="text" required placeholder="Your name">
+        </div>
+        <div class="f">
+          <label for="phone">Phone / WhatsApp Number</label>
+          <input id="phone" type="tel" required placeholder="+91 00000 00000">
+        </div>
+        <div class="f">
+          <label for="msg">Tell us about your trip</label>
+          <textarea id="msg" placeholder="Destination, dates, number of travellers…"></textarea>
+        </div>
+        <button type="submit">Send Enquiry</button>
+        <p class="form-note" id="formNote">Thanks! This opens WhatsApp with your details pre-filled — hit send there to reach our travel desk.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div class="foot-brand">Trip Nova</div>
+    <div class="foot-links">
+      <a href="#destinations">Destinations</a>
+      <a href="#packages">Packages</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 Trip Nova. All rights reserved.</span>
+    <span>Siliguri, West Bengal, India</span>
+  </div>
+</footer>
+
+<a class="float-wa" href="https://wa.me/919876543210?text=Hi%20Trip%20Nova%2C%20I%27d%20like%20to%20plan%20a%20trip." target="_blank" rel="noopener" aria-label="Chat with Trip Nova on WhatsApp">
+  <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16 3C9 3 3.3 8.6 3.3 15.5c0 2.6.8 5.1 2.2 7.2L3 29l6.5-2.4c2 .9 3.7 1.4 6.5 1.4 7 0 12.7-5.6 12.7-12.5S23 3 16 3zm0 22.7c-2.2 0-4-.5-5.8-1.5l-.4-.2-4 1.5 1.4-3.9-.3-.4c-1.3-2-2-4.3-2-6.7C4.9 9.6 9.9 4.7 16 4.7s11.1 4.9 11.1 10.8S22.1 25.7 16 25.7z"/><path d="M22 18.2c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.7.2-.2.3-.8 1.1-1 1.3-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.7-1.7-1-.9-1.7-2-1.9-2.3-.2-.3 0-.5.1-.7.1-.1.3-.4.5-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5 0-.2-.7-1.8-1-2.4-.3-.6-.5-.6-.7-.6h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.2 3.4 5.3 4.7.7.3 1.3.5 1.8.7.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.2-.6-.4z"/></svg>
+</a>
+
+<script>
+  // Mobile nav toggle
+  const burger = document.getElementById('burgerBtn');
+  const panel = document.getElementById('mobilePanel');
+  burger.addEventListener('click', () => {
+    const open = panel.classList.toggle('open');
+    burger.setAttribute('aria-expanded', open);
+  });
+  panel.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    panel.classList.remove('open');
+    burger.setAttribute('aria-expanded', 'false');
+  }));
+
+  // Contact form -> WhatsApp handoff
+  document.getElementById('contactForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const msg = document.getElementById('msg').value.trim();
+    const text = `Hi Trip Nova, my name is ${name} (${phone}). ${msg}`;
+    const note = document.getElementById('formNote');
+    note.classList.add('show');
+    window.open(`https://wa.me/919876543210?text=${encodeURIComponent(text)}`, '_blank');
+  });
+</script>
+
+</body>
+</html>
