@@ -606,6 +606,66 @@ footer{ background: var(--paper-raised); border-top:1px solid var(--line-soft); 
   100%{ opacity:0; }
 }
 .wa-float svg{ width:30px; height:30px; fill:#fff; position:relative; z-index:2; }
+@media (max-width: 991px){ .wa-float{ bottom: 6.4rem; } }
+
+/* =====================================================================
+   LIQUID GLASS BOTTOM NAVIGATION (mobile / tablet)
+   ===================================================================== */
+.liquid-nav{
+  position: fixed;
+  left: 50%; bottom: 1.1rem; transform: translateX(-50%);
+  z-index: 1150;
+  display: flex; align-items: center; gap: .3rem;
+  padding: .45rem;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(255,255,255,.62), rgba(255,255,255,.28));
+  -webkit-backdrop-filter: blur(22px) saturate(190%);
+  backdrop-filter: blur(22px) saturate(190%);
+  border: 1px solid rgba(255,255,255,.65);
+  box-shadow:
+    0 18px 40px -14px rgba(14,42,46,.4),
+    0 2px 6px rgba(14,42,46,.08),
+    inset 0 1px 1px rgba(255,255,255,.9),
+    inset 0 -1px 6px rgba(255,255,255,.25);
+}
+[data-theme="dark"] .liquid-nav{
+  background: linear-gradient(180deg, rgba(20,42,45,.6), rgba(14,30,32,.35));
+  border-color: rgba(255,255,255,.16);
+  box-shadow:
+    0 18px 40px -14px rgba(0,0,0,.65),
+    inset 0 1px 1px rgba(255,255,255,.1),
+    inset 0 -1px 6px rgba(255,255,255,.04);
+}
+.liquid-nav a{
+  position: relative;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  color: var(--ink);
+  transition: background .35s ease, color .35s ease, transform .3s cubic-bezier(.34,1.56,.64,1), box-shadow .35s ease;
+}
+.liquid-nav a .material-symbols-rounded{ font-size: 22px; }
+.liquid-nav a::before{
+  content:""; position:absolute; inset:0; border-radius:50%;
+  background: rgba(255,255,255,.35);
+  opacity:0; transition: opacity .25s ease;
+}
+.liquid-nav a:hover::before{ opacity:1; }
+.liquid-nav a.active{
+  background: var(--grad-sunset);
+  color:#fff;
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 12px 22px -6px rgba(255,107,74,.65);
+}
+.liquid-nav a.active::before{ display:none; }
+.liquid-nav a .dot{
+  position:absolute; bottom:5px; left:50%; transform: translateX(-50%);
+  width:4px; height:4px; border-radius:50%; background:#fff; opacity:0; transition: opacity .25s ease;
+}
+.liquid-nav a.active .dot{ opacity:1; }
+
+@media (min-width: 992px){ .liquid-nav{ display:none; } }
+@media (max-width: 991px){ body{ padding-bottom: 5.6rem; } }
 
 /* reveal-on-scroll */
 .reveal{ opacity:0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
@@ -624,11 +684,17 @@ footer{ background: var(--paper-raised); border-top:1px solid var(--line-soft); 
   <div class="container-tn">
     <a href="#top" class="tn-logo">
       <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="24" cy="24" r="23" stroke="url(#lg)" stroke-width="2" stroke-dasharray="3 4"/>
-        <path d="M14 27L34 15L27 33L23 25L14 27Z" fill="url(#lg2)"/>
+        <circle cx="24" cy="24" r="21" stroke="url(#lg)" stroke-width="2"/>
+        <circle cx="24" cy="24" r="16.5" stroke="url(#lg)" stroke-width="1" stroke-dasharray="1 3.4" opacity=".55"/>
+        <line x1="24" y1="3.5" x2="24" y2="8.5" stroke="url(#lg)" stroke-width="1.6"/>
+        <line x1="24" y1="39.5" x2="24" y2="44.5" stroke="url(#lg)" stroke-width="1.4" opacity=".5"/>
+        <line x1="3.5" y1="24" x2="8.5" y2="24" stroke="url(#lg)" stroke-width="1.4" opacity=".5"/>
+        <line x1="39.5" y1="24" x2="44.5" y2="24" stroke="url(#lg)" stroke-width="1.4" opacity=".5"/>
+        <path d="M24 9L28.2 24L24 39L19.8 24Z" fill="url(#lg2)"/>
+        <circle cx="24" cy="24" r="2.6" fill="#FBF7F1" stroke="url(#lg)" stroke-width="1"/>
         <defs>
           <linearGradient id="lg" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#FF6B4A"/><stop offset="1" stop-color="#FFB347"/></linearGradient>
-          <linearGradient id="lg2" x1="14" y1="15" x2="34" y2="33"><stop stop-color="#0E4B4F"/><stop offset="1" stop-color="#1C8489"/></linearGradient>
+          <linearGradient id="lg2" x1="19.8" y1="9" x2="28.2" y2="39"><stop stop-color="#0E4B4F"/><stop offset="1" stop-color="#1C8489"/></linearGradient>
         </defs>
       </svg>
       Tripnova
@@ -672,7 +738,7 @@ footer{ background: var(--paper-raised); border-top:1px solid var(--line-soft); 
 <header class="hero" id="top">
   <span class="hero-arc"></span>
   <span class="hero-arc two"></span>
-  <div class="hero-postcard p1"><img src="https://picsum.photos/seed/tripnova-hero1/240/300" alt="Mountain valley on a Tripnova trip" loading="lazy"></div>
+  <div class="hero-postcard p1"><img src="https://th.bing.com/th/id/OIP.hXO90GTQwqGrvN8MQ3wSmwHaHa?w=202&h=202&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" alt="Compass" loading="lazy"></div>
   <div class="hero-postcard p2"><img src="https://picsum.photos/seed/tripnova-hero2/220/280" alt="Beach holiday moment" loading="lazy"></div>
   <div class="hero-postcard p3"><img src="https://picsum.photos/seed/tripnova-hero3/210/260" alt="Houseboat backwaters holiday" loading="lazy"></div>
   <div class="container-tn">
@@ -1243,11 +1309,17 @@ footer{ background: var(--paper-raised); border-top:1px solid var(--line-soft); 
       <div>
         <a href="#top" class="tn-logo" style="margin-bottom:1rem;">
           <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:30px;height:30px;">
-            <circle cx="24" cy="24" r="23" stroke="url(#lg3)" stroke-width="2" stroke-dasharray="3 4"/>
-            <path d="M14 27L34 15L27 33L23 25L14 27Z" fill="url(#lg4)"/>
+            <circle cx="24" cy="24" r="21" stroke="url(#lg5)" stroke-width="2"/>
+            <circle cx="24" cy="24" r="16.5" stroke="url(#lg5)" stroke-width="1" stroke-dasharray="1 3.4" opacity=".55"/>
+            <line x1="24" y1="3.5" x2="24" y2="8.5" stroke="url(#lg5)" stroke-width="1.6"/>
+            <line x1="24" y1="39.5" x2="24" y2="44.5" stroke="url(#lg5)" stroke-width="1.4" opacity=".5"/>
+            <line x1="3.5" y1="24" x2="8.5" y2="24" stroke="url(#lg5)" stroke-width="1.4" opacity=".5"/>
+            <line x1="39.5" y1="24" x2="44.5" y2="24" stroke="url(#lg5)" stroke-width="1.4" opacity=".5"/>
+            <path d="M24 9L28.2 24L24 39L19.8 24Z" fill="url(#lg6)"/>
+            <circle cx="24" cy="24" r="2.6" fill="#FBF7F1" stroke="url(#lg5)" stroke-width="1"/>
             <defs>
-              <linearGradient id="lg3" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#FF6B4A"/><stop offset="1" stop-color="#FFB347"/></linearGradient>
-              <linearGradient id="lg4" x1="14" y1="15" x2="34" y2="33"><stop stop-color="#0E4B4F"/><stop offset="1" stop-color="#1C8489"/></linearGradient>
+              <linearGradient id="lg5" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#FF6B4A"/><stop offset="1" stop-color="#FFB347"/></linearGradient>
+              <linearGradient id="lg6" x1="19.8" y1="9" x2="28.2" y2="39"><stop stop-color="#0E4B4F"/><stop offset="1" stop-color="#1C8489"/></linearGradient>
             </defs>
           </svg>
           Tripnova
@@ -1296,6 +1368,15 @@ footer{ background: var(--paper-raised); border-top:1px solid var(--line-soft); 
 <a href="#" class="wa-float" id="floatWhatsapp" target="_blank" rel="noopener" aria-label="Chat with Tripnova on WhatsApp">
   <svg viewBox="0 0 32 32"><path d="M16 3C9.4 3 4 8.4 4 15c0 2.4.7 4.6 1.9 6.5L4 29l7.7-1.9c1.8 1 3.9 1.5 6.3 1.5 6.6 0 12-5.4 12-12S22.6 3 16 3zm0 21.8c-2 0-3.9-.5-5.5-1.5l-.4-.2-4.6 1.2 1.2-4.5-.3-.4C5.4 17.7 4.9 16 4.9 15 4.9 8.9 9.9 3.9 16 3.9S27.1 8.9 27.1 15 22.1 24.8 16 24.8zm6.1-8.4c-.3-.2-2-1-2.3-1.1-.3-.1-.5-.2-.7.2-.2.3-.8 1.1-1 1.3-.2.2-.4.2-.7.1-.3-.2-1.4-.5-2.6-1.6-1-.9-1.6-2-1.8-2.3-.2-.3 0-.5.1-.6.1-.1.3-.4.5-.5.2-.2.2-.3.3-.5.1-.2 0-.4 0-.6-.1-.2-.7-1.7-1-2.3-.3-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.4s1.1 2.8 1.2 3c.1.2 2.1 3.3 5.2 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 2-.8 2.2-1.6.3-.8.3-1.4.2-1.6-.1-.1-.3-.2-.6-.4z"/></svg>
 </a>
+
+<!-- Liquid-glass bottom navigation (mobile / tablet) -->
+<nav class="liquid-nav" id="liquidNav" aria-label="Bottom navigation">
+  <a href="#top" data-target="top" class="active" aria-label="Home"><span class="material-symbols-rounded">home</span><span class="dot"></span></a>
+  <a href="#routes" data-target="routes" aria-label="Destinations"><span class="material-symbols-rounded">explore</span><span class="dot"></span></a>
+  <a href="#packages" data-target="packages" aria-label="Packages"><span class="material-symbols-rounded">luggage</span><span class="dot"></span></a>
+  <a href="#gallery" data-target="gallery" aria-label="Gallery"><span class="material-symbols-rounded">photo_camera</span><span class="dot"></span></a>
+  <a href="#query" data-target="query" aria-label="Contact"><span class="material-symbols-rounded">forum</span><span class="dot"></span></a>
+</nav>
 
 <script>
 /* =====================================================================
@@ -1460,6 +1541,23 @@ const counterIO = new IntersectionObserver((entries) => {
   });
 }, { threshold: .5 });
 counters.forEach(el => counterIO.observe(el));
+
+/* =====================================================================
+   LIQUID GLASS BOTTOM NAV — active state via scrollspy
+   ===================================================================== */
+const liquidLinks = document.querySelectorAll('.liquid-nav a');
+const spySections = ['top','routes','packages','gallery','query']
+  .map(id => document.getElementById(id))
+  .filter(Boolean);
+const spyIO = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      const id = entry.target.id;
+      liquidLinks.forEach(a => a.classList.toggle('active', a.dataset.target === id));
+    }
+  });
+}, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+spySections.forEach(sec => spyIO.observe(sec));
 </script>
 </body>
 </html>
