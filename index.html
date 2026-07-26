@@ -218,9 +218,9 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 /* large flickering compass watermark, filling the hero background */
 .hero-compass-bg{
-  position:absolute; top:50%; left:50%; z-index:0;
-  width: min(1100px, 130vw); height: min(1100px, 130vw);
-  transform: translate(-50%,-50%);
+  position:absolute; top:-6%; left:50%; z-index:0;
+  width: min(1000px, 120vw); height: min(1000px, 120vw);
+  transform: translateX(-50%);
   pointer-events:none;
 }
 .hero-compass-svg{
@@ -229,11 +229,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 @keyframes compassSpin{ from{ transform: rotate(0deg); } to{ transform: rotate(360deg); } }
 @keyframes compassFlicker{
-  0%,100%{ opacity:.10; }
-  22%{ opacity:.20; }
-  45%{ opacity:.07; }
-  68%{ opacity:.22; }
-  85%{ opacity:.12; }
+  0%,100%{ opacity:.22; }
+  22%{ opacity:.36; }
+  45%{ opacity:.16; }
+  68%{ opacity:.40; }
+  85%{ opacity:.24; }
 }
 .hero .container-tn{ position:relative; z-index:2; }
 .hero-grid{ display:grid; grid-template-columns: 1.05fr .95fr; gap: 3rem; align-items:center; }
