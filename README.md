@@ -1,2 +1,2 @@
 # Trip-Nova
-Tour and travels
+Tour and travel
